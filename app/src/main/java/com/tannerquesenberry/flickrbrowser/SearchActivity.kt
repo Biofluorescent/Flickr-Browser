@@ -1,15 +1,18 @@
 package com.tannerquesenberry.flickrbrowser
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.util.Log
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : BaseActivity() {
+    private val TAG = "SearchActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d(TAG, ".onCreate: starts")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-        setSupportActionBar(findViewById(R.id.toolbar))
 
+        activateToolbar(true)
+        Log.d(TAG, ".onCreate: ends")
 
     }
 }
