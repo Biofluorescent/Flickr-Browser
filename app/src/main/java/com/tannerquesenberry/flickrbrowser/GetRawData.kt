@@ -44,7 +44,7 @@ class GetRawData(private val listener: OnDownloadComplete): AsyncTask<String, Vo
                 }
                 else -> {
                     downloadStatus = DownloadStatus.ERROR
-                    "Uknown error: ${e.message}"
+                    "Unknown error: ${e.message}"
                 }
             }
             Log.d(TAG, errorMessage)
@@ -54,7 +54,7 @@ class GetRawData(private val listener: OnDownloadComplete): AsyncTask<String, Vo
     }
 
     override fun onPostExecute(result: String) {
-        Log.d(TAG, "OnPostExecute called, parameter is $result")
+        Log.d(TAG, "OnPostExecute called")
         listener.onDownloadComplete(result, downloadStatus)
     }
 }

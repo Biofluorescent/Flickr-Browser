@@ -2,15 +2,14 @@ package com.tannerquesenberry.flickrbrowser
 
 import android.os.Bundle
 import android.util.Log
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import java.lang.Exception
 
 private const val TAG = "MainActivity"
 
-class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete {
+class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete, GetFlickrJsonData.OnDataAvailable {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate called")
@@ -19,13 +18,8 @@ class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete {
         setSupportActionBar(findViewById(R.id.toolbar))
 
         val getRawData = GetRawData(this)
-//        getRawData.setDownloadCompletedListener(this)
         getRawData.execute("https://www.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=1")
 
-//        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                    .setAction("Action", null).show()
-//        }
         Log.d(TAG, "onCreate ends")
     }
 
@@ -53,10 +47,25 @@ class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete {
 
     override fun onDownloadComplete(data: String, status: DownloadStatus) {
         if (status == DownloadStatus.OK) {
-            Log.d(TAG, "onDowloadComplete called, data is $data")
+            Log.d(TAG, "onDownloadComplete called")
+
+            val getFlickrJsonData = GetFlickrJsonData(this)
+            getFlickrJsonData.execute(data)
         }else {
             //download failed
-            Log.d(TAG, "onDownloadCompleted failed with status $status. Error message is: $data")
+            Log.d(TAG, "onDownloadComplete failed with status $status. Error message is: $data")
         }
     }
+
+    override fun onDataAvailable(data: List<Photo>) {
+        Log.d(TAG, ".onDataAvailable called, data is $data")
+
+        Log.d(TAG, ".onDataAvailable ends")
+    }
+
+    override fun onError(exception: Exception) {
+        Log.e(TAG, "onError called with ${exception.message}")
+    }
+
+
 }
