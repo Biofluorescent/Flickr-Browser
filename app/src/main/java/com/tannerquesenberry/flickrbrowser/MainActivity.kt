@@ -6,11 +6,15 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import java.lang.Exception
 
 private const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete, GetFlickrJsonData.OnDataAvailable {
+
+    private val flickrRecyclerViewAdapter = FlickrRecyclerViewAdapter(ArrayList())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "onCreate called")
@@ -18,8 +22,15 @@ class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete, GetFlic
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
 
-        val url = createUri("https://www.flickr.com/services/feeds/photos_public.gne", "space", "en-us", true)
+        // Get RecyclerView and set up with adapter
+        val recycler_view: RecyclerView = findViewById(R.id.recycler_view)
+        recycler_view.layoutManager = LinearLayoutManager(this)
+        recycler_view.adapter = flickrRecyclerViewAdapter
 
+        // Get the URL to get data from
+        val url = createUri("https://www.flickr.com/services/feeds/photos_public.gne", "dog", "en-us", true)
+
+        // Request the Json data from the URL
         val getRawData = GetRawData(this)
         getRawData.execute(url)
 
@@ -75,8 +86,8 @@ class MainActivity : AppCompatActivity(), GetRawData.OnDownloadComplete, GetFlic
     }
 
     override fun onDataAvailable(data: List<Photo>) {
-        Log.d(TAG, ".onDataAvailable called, data is $data")
-
+        Log.d(TAG, ".onDataAvailable called")
+        flickrRecyclerViewAdapter.loadNewData(data)
         Log.d(TAG, ".onDataAvailable ends")
     }
 
