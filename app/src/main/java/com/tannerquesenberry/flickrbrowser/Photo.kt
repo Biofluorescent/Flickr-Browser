@@ -2,7 +2,6 @@ package com.tannerquesenberry.flickrbrowser
 
 import android.util.Log
 import java.io.IOException
-import java.io.ObjectStreamClass
 import java.io.ObjectStreamException
 import java.io.Serializable
 
@@ -45,6 +44,4 @@ class Photo(var title: String, var author: String, var authorId: String, var lin
     private fun readObjectNoData() {
         Log.d("Photo", "readObjectNoData called")
     }
-
-
 }
